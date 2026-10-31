@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Dados de exemplo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo__barra">
+      <a class="marca" href="../admin.html">
+        <span class="marca__logo" aria-hidden="true">PA</span>
+        <span><strong>Dados de exemplo</strong><small>Ferramenta para demonstração do portal</small></span>
+      </a>
+      <span class="topo__usuario" id="usuario"></span>
+      <a class="botao botao--secundario botao--pequeno" href="../index.html">Ver o portal</a>
+    </div>
+  </header>
+
+  <main class="pagina">
+    <section class="painel">
+      <div class="painel__cabeca">
+        <div>
+          <h1>Preencher o portal com dados fictícios</h1>
+          <p>Cria horário, provas, avisos, resumos com perguntas e cardápio para as nove séries, como se os professores já usassem o portal. Todo item criado aqui fica marcado como exemplo e pode ser apagado depois.</p>
+        </div>
+      </div>
+      <p class="alerta" id="alerta" role="alert"></p>
+      <div id="estado"></div>
+      <label class="marcador" for="limpar-tudo" style="display:flex;gap:8px;margin:14px 0;font-weight:400">
+        <input type="checkbox" id="limpar-tudo" style="width:auto;min-height:0">
+        <span>Antes de carregar, apagar também o conteúdo que <strong>não</strong> é de exemplo (por exemplo, testes publicados à mão).</span>
+      </label>
+      <div class="acoes">
+        <button type="button" class="botao" id="carregar" disabled>Carregar dados de exemplo</button>
+        <button type="button" class="botao botao--perigo" id="apagar" disabled>Apagar dados de exemplo</button>
+      </div>
+      <ul class="lista-simples" id="registro" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <script type="module" src="exemplo.js"></script>
+</body>
+</html>

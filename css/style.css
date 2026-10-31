@@ -1,0 +1,624 @@
+/**
+ * style.css
+ * Estilos do portal do aluno (index.html) e da área da escola (admin.html).
+ * Tema claro, com cores de baixa saturação; layout pensado primeiro para celular.
+ *
+ * Autor: Fabiano | out/2026 (última alteração: 31/10/2026)
+ */
+
+/* ===== Variáveis (cores e medidas) ===== */
+:root {
+  --primaria: #1f4e79;
+  --primaria-escura: #163a5b;
+  --primaria-clara: #e9eff6;
+
+  --texto: #1d232b;
+  --muda: #5b6470;            /* texto secundário */
+  --borda: #d7dce2;
+  --borda-forte: #b6bec8;
+
+  --fundo: #f3f4f6;
+  --branco: #ffffff;
+  --cinza: #f6f7f9;
+
+  --perigo: #a4262c;          /* erros e exclusão */
+  --perigo-fundo: #fbeceb;
+  --atencao: #7a5300;         /* avisos "Novo" e alterações pendentes */
+  --atencao-fundo: #fff5dc;
+  --atencao-borda: #e5c56f;
+
+  --raio: 6px;
+  --fonte: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+  --toque: 40px;              /* altura mínima de botões e campos (toque no celular) */
+}
+
+
+/* ===== Base ===== */
+* { box-sizing: border-box; margin: 0; }
+
+/* compensa o topo fixo ao navegar pelos links do menu */
+html { scroll-padding-top: 116px; }
+
+body {
+  font-family: var(--fonte);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+h1, h2, h3 { font-weight: 700; line-height: 1.25; }
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.05rem; }
+a { color: var(--primaria); }
+
+:focus-visible { outline: 2px solid var(--primaria); outline-offset: 2px; }
+
+/* link "Pular para o conteúdo": fora da tela, aparece ao receber foco do teclado */
+.pular {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 99;
+  background: var(--branco);
+  padding: 8px 14px;
+  border: 1px solid var(--borda);
+}
+.pular:focus { left: 8px; }
+
+.oculto { display: none !important; }
+.muda { color: var(--muda); }
+
+
+/* ===== Topo ===== */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--branco);
+  border-bottom: 1px solid var(--borda);
+}
+.topo__barra {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+  color: var(--texto);
+  text-decoration: none;
+}
+.marca__logo {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--primaria);
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+  border-radius: 4px;
+}
+.marca strong { display: block; font-size: 1.1rem; }
+.marca small { display: block; color: var(--muda); font-size: .85rem; line-height: 1.2; }
+
+.topo__serie { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.topo__serie select { width: auto; min-width: 140px; }
+.topo__usuario { color: var(--muda); font-size: .9rem; }
+
+/* menu das seções do portal (rola na horizontal no celular) */
+.topo__menu {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 8px;
+  display: flex;
+  overflow-x: auto;
+}
+.topo__menu a {
+  flex: 0 0 auto;
+  padding: 6px 10px 9px;
+  color: var(--muda);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .95rem;
+  border-bottom: 2px solid transparent;
+}
+.topo__menu a:hover { color: var(--texto); border-bottom-color: var(--borda-forte); }
+
+
+/* ===== Página e painéis ===== */
+.pagina {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);   /* impede que tabelas largas estourem a tela */
+  gap: 20px;
+}
+.painel {
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 20px;
+  min-width: 0;
+}
+.painel__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 14px;
+}
+.painel__cabeca p { color: var(--muda); font-size: .95rem; max-width: 65ch; }
+
+/* mensagens de vazio, carregando e erro (função estado() em ui.js) */
+.estado { color: var(--muda); }
+.estado--erro { color: var(--perigo); }
+
+
+/* ===== Cor de cada seção do portal =====
+   --cor é aplicada na faixa superior, no marcador do título, no cabeçalho das
+   tabelas e nos botões da seção. */
+.pagina > .painel { --cor: var(--primaria); border-top: 4px solid var(--cor); }
+#horario      { --cor: #1f4e79; }
+#provas       { --cor: #a23d32; }
+#avisos       { --cor: #b07a16; }
+#resumos      { --cor: #2a7a70; }
+#cardapio     { --cor: #3f7d3a; }
+#estudo       { --cor: #5d4d91; }
+#minha-agenda { --cor: #4b6584; }
+#opiniao      { --cor: #1f4e79; }
+
+/* marcador quadrado antes do título da seção */
+.pagina > .painel h2::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 2px;
+  background: var(--cor);
+  vertical-align: 2px;
+}
+/* tons claros da cor da seção (mistura com branco) */
+.pagina thead th,
+.pagina .horario tbody th { background: color-mix(in srgb, var(--cor) 9%, var(--branco)); }
+.pagina .resumo__disc, .pagina .dica h3, .pagina .foco h3 { color: var(--cor); }
+.pagina .botao { --primaria: var(--cor); --primaria-escura: color-mix(in srgb, var(--cor) 80%, #000); }
+.pagina .mes h3 { border-bottom-color: color-mix(in srgb, var(--cor) 45%, var(--branco)); }
+.dia--hoje {
+  border-color: var(--cor) !important;
+  background: color-mix(in srgb, var(--cor) 8%, var(--branco)) !important;
+}
+
+
+/* ===== Painel "Hoje" ===== */
+.hoje__data { color: var(--primaria); font-weight: 600; }
+.hoje h1 { margin-bottom: 16px; }
+.hoje__grade {
+  display: grid;
+  gap: 16px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.hoje__grade > div { border-left: 3px solid var(--marca, var(--primaria)); padding-left: 12px; }
+.hoje__grade > div:nth-child(2) { --marca: #3f7d3a; }   /* merenda */
+.hoje__grade > div:nth-child(3) { --marca: #a23d32; }   /* próximas provas */
+.pagina > .hoje h2::before { display: none; }
+.hoje__grade h2 {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--marca, var(--primaria));
+  margin-bottom: 6px;
+}
+.hoje__grade ul { list-style: none; padding: 0; display: grid; gap: 4px; }
+
+
+/* ===== Tabelas ===== */
+/* .tabela envolve a tabela e permite rolagem horizontal no celular */
+.tabela { overflow-x: auto; border: 1px solid var(--borda); border-radius: var(--raio); }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td {
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  vertical-align: top;
+}
+thead th { background: var(--cinza); white-space: nowrap; }
+tbody tr:last-child > * { border-bottom: 0; }
+tbody th { font-weight: 600; }
+tr.passou td { color: var(--muda); }   /* datas que já passaram */
+td.acoes-celula { white-space: nowrap; text-align: right; }
+td.acoes-celula .link + .link { margin-left: 12px; }
+
+/* horário das aulas (portal) */
+.horario { min-width: 680px; table-layout: fixed; }
+.horario th, .horario td { border-right: 1px solid var(--borda); }
+.horario th:last-child, .horario td:last-child { border-right: 0; }
+.horario thead th:first-child,
+.horario tbody th {
+  width: 128px;
+  color: var(--muda);
+  font-variant-numeric: tabular-nums;   /* números com largura igual, horários alinhados */
+  white-space: nowrap;
+}
+.horario .col-hoje { background: var(--primaria-clara); }   /* coluna do dia de hoje */
+.horario small { display: block; color: var(--muda); }
+
+
+/* ===== Etiquetas ===== */
+.etiqueta {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 3px;
+  border: 1px solid var(--borda);
+  background: var(--cinza);
+  color: var(--muda);
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  line-height: 1.6;
+  vertical-align: middle;
+}
+/* variações por tipo; "Feriado" usa a etiqueta padrão */
+.etiqueta--novo    { background: var(--atencao-fundo); border-color: var(--atencao-borda); color: var(--atencao); }
+.etiqueta--prova   { background: #fbecea; border-color: #e7bdb8; color: #8b2b22; }
+.etiqueta--entrega { background: #eaf0f8; border-color: #bccde3; color: #1f4e79; }
+.etiqueta--evento  { background: #e9f4ec; border-color: #b9d9c1; color: #2b6a3d; }
+
+
+/* ===== Mural de avisos ===== */
+.avisos { list-style: none; padding: 0; }
+.avisos li { padding: 12px 0; border-top: 1px solid var(--borda); display: grid; gap: 2px; }
+.avisos li:first-child { border-top: 0; padding-top: 0; }
+.avisos__meta {
+  font-size: .85rem;
+  color: var(--muda);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.avisos p { white-space: pre-line; }   /* mantém as quebras de linha do texto */
+
+
+/* ===== Filtros ===== */
+.filtros { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+.filtros label { flex: 1 1 220px; }
+/* caixa de seleção com texto ao lado */
+.filtros .marcador { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; font-weight: 400; }
+.filtros .marcador input { width: auto; min-height: 0; }
+
+
+/* ===== Resumos ===== */
+/* caixa "Você tem N resumos para revisar hoje" */
+.caixa-atencao {
+  background: var(--atencao-fundo);
+  border: 1px solid var(--atencao-borda);
+  border-radius: var(--raio);
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+.caixa-atencao ul { margin-top: 4px; padding-left: 20px; }
+
+/* grupo do mês */
+.mes { margin-top: 18px; }
+.mes h3 {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muda);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--borda-forte);
+}
+
+/* cada resumo (<details>) */
+.resumo { border-bottom: 1px solid var(--borda); }
+.resumo summary {
+  padding: 10px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+}
+.resumo summary:hover { background: var(--cinza); }
+.resumo__data { color: var(--muda); font-variant-numeric: tabular-nums; min-width: 3.2em; }
+.resumo__disc { font-weight: 600; color: var(--primaria); }
+.resumo__corpo { padding: 4px 4px 18px; display: grid; gap: 12px; }
+.resumo__texto { white-space: pre-line; max-width: 75ch; }
+.mais { margin-top: 14px; }
+
+/* teste de perguntas (flashcard) */
+.teste {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--cinza);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  max-width: 640px;
+}
+.teste__contagem { font-size: .85rem; color: var(--muda); }
+.teste__pergunta { font-size: 1.1rem; font-weight: 600; }
+.teste__resposta {
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 8px 12px;
+}
+
+
+/* ===== Cardápio ===== */
+.miniatura {
+  display: block;
+  max-width: 100%;
+  max-height: 520px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+.cardapio-imagem { display: grid; gap: 8px; justify-items: start; margin-bottom: 16px; }
+.dias { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.dia { border: 1px solid var(--borda); border-radius: var(--raio); padding: 12px 14px; }
+/* destaque padrão do dia; no portal prevalece a regra com --cor da seção */
+.dia--hoje { border-color: var(--primaria); background: var(--primaria-clara); }
+.dia h3 { margin-bottom: 4px; }
+.dia p { font-size: .95rem; }
+.dia p + p { color: var(--muda); }
+
+
+/* ===== Como estudar (dicas e cronômetro) ===== */
+.dicas { display: grid; gap: 18px 24px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.dica h3 { margin-bottom: 4px; }
+.dica p { color: var(--muda); font-size: .95rem; }
+
+.foco {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  align-content: start;
+}
+.foco__tempo { font-size: 2.4rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.foco__fase { color: var(--muda); font-size: .95rem; }
+
+
+/* ===== Minha agenda ===== */
+.lista-simples { list-style: none; padding: 0; margin-top: 14px; }
+.lista-simples li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--borda);
+}
+.lista-simples li:first-child { border-top: 0; }
+.lista-simples strong { flex: 1 1 220px; font-weight: 600; }
+
+
+/* ===== Formulários ===== */
+input, select, textarea {
+  font: inherit;
+  width: 100%;
+  min-height: var(--toque);
+  padding: 7px 10px;
+  border: 1px solid var(--borda-forte);
+  border-radius: 4px;
+  background: var(--branco);
+  color: var(--texto);
+}
+input[type="file"] { padding: 6px; }
+textarea { min-height: 100px; resize: vertical; }
+label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }
+.campos { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.campos--largo { grid-column: 1 / -1; }   /* campo que ocupa a linha inteira */
+.ajuda { font-weight: 400; font-size: .85rem; color: var(--muda); }
+
+
+/* ===== Botões ===== */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--toque);
+  padding: 7px 16px;
+  border: 1px solid var(--primaria);
+  border-radius: 4px;
+  background: var(--primaria);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.botao:hover { background: var(--primaria-escura); border-color: var(--primaria-escura); }
+.botao:disabled { opacity: .6; cursor: progress; }
+
+.botao--secundario { background: var(--branco); color: var(--texto); border-color: var(--borda-forte); }
+.botao--secundario:hover { background: var(--cinza); border-color: var(--borda-forte); }
+.botao--perigo { background: var(--branco); color: var(--perigo); border-color: #d9a3a6; }
+.botao--perigo:hover { background: var(--perigo-fundo); border-color: #d9a3a6; }
+.botao--pequeno { min-height: 32px; padding: 3px 12px; font-size: .9rem; }
+
+.acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* botão com aparência de link */
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--primaria);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.link--perigo { color: var(--perigo); }
+
+
+/* ===== Alertas e avisos rápidos (toast) ===== */
+.alerta {
+  background: var(--perigo-fundo);
+  border: 1px solid #e3b5b7;
+  color: var(--perigo);
+  padding: 10px 14px;
+  border-radius: var(--raio);
+}
+.alerta:empty { display: none; }   /* esconde o alerta quando não há mensagem */
+
+/* toast: fica abaixo da tela e sobe com a classe .visivel (função avisar() em ui.js) */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, 200%);
+  z-index: 60;
+  background: var(--texto);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 4px;
+  max-width: 90vw;
+  text-align: center;
+  transition: transform .2s ease;
+}
+.toast.visivel { transform: translate(-50%, 0); }
+.toast--erro { background: var(--perigo); }
+
+
+/* ===== Rodapé ===== */
+.rodape {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--muda);
+  font-size: .9rem;
+  background: var(--branco);
+  border-top: 1px solid var(--borda);
+  display: grid;
+  gap: 4px;
+}
+
+
+/* ===== Área da escola: login e painel ===== */
+.login { max-width: 400px; margin: 48px auto; width: calc(100% - 32px); display: grid; gap: 14px; }
+.admin { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px; display: grid; gap: 20px; }
+
+/* menu das seções: horizontal no celular, lateral no computador */
+.admin__menu {
+  display: flex;
+  overflow-x: auto;
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 6px;
+  gap: 2px;
+}
+.admin__menu button {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.admin__menu button:hover { background: var(--cinza); }
+.admin__menu button[aria-current="page"] {   /* seção aberta */
+  background: var(--primaria-clara);
+  color: var(--primaria-escura);
+  font-weight: 700;
+}
+.admin__menu .num { color: var(--muda); font-size: .85rem; font-weight: 400; }
+
+@media (min-width: 880px) {
+  .admin { grid-template-columns: 220px minmax(0, 1fr); align-items: start; }
+  .admin__menu { flex-direction: column; position: sticky; top: 76px; }
+}
+
+.secao { display: grid; gap: 16px; min-width: 0; }
+.secao__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.secao__cabeca p { color: var(--muda); max-width: 70ch; margin-top: 2px; }
+
+
+/* ===== Área da escola: quadro de horário (tipo planilha) ===== */
+.grade-horario { min-width: 760px; }
+.grade-horario td { padding: 0; }
+.grade-horario td input { border: 0; border-radius: 0; min-height: 40px; background: transparent; }
+.grade-horario td input:focus {
+  outline: 2px solid var(--primaria);
+  outline-offset: -2px;   /* contorno por dentro da célula */
+  background: var(--branco);
+}
+.grade-horario td:first-child { width: 140px; background: var(--cinza); }
+.grade-horario td:first-child input { font-variant-numeric: tabular-nums; }
+.grade-horario td.col-acao { width: 44px; text-align: center; }
+/* botão × de remover linha */
+.grade-horario .remover {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: none;
+  color: var(--muda);
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.grade-horario .remover:hover { background: var(--perigo-fundo); color: var(--perigo); }
+
+/* status "Horário salvo" / "Há alterações não salvas" */
+.status { font-size: .9rem; color: var(--muda); }
+.status--pendente { color: var(--atencao); font-weight: 600; }
+
+
+/* ===== Área da escola: janela do formulário (<dialog>) ===== */
+.janela {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 0;
+  width: min(680px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  color: var(--texto);
+}
+.janela::backdrop { background: rgba(20, 24, 30, .45); }
+.janela form { padding: 20px; display: grid; gap: 16px; }
+.janela__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--borda);
+  padding-top: 14px;
+}
+
+
+/* ===== Impressão: esconde topo, rodapé, botões e filtros ===== */
+@media print {
+  .topo, .rodape, .acoes, .toast, .filtros { display: none; }
+  .painel { border: 0; }
+}

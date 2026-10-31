@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Área da escola</title>
+  <!--
+    Área da escola - login e publicação do conteúdo pelos professores e coordenação.
+    As seções, a tabela e o formulário são montados por js/admin.js.
+    Autor: Fabiano | out/2026
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Acessibilidade: atalho de teclado para pular o menu -->
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+
+  <!-- ===== Topo: marca, usuário logado, link para o portal e botão Sair ===== -->
+  <header class="topo">
+    <div class="topo__barra">
+      <a class="marca" href="index.html">
+        <span class="marca__logo" id="logo" aria-hidden="true"></span>
+        <span><strong id="nome-escola"></strong><small>Área da escola · professores e coordenação</small></span>
+      </a>
+      <span class="topo__usuario" id="usuario"></span>
+      <a class="botao botao--secundario botao--pequeno" href="index.html">Ver o portal</a>
+      <button type="button" class="botao botao--secundario botao--pequeno oculto" id="sair">Sair</button>
+    </div>
+  </header>
+
+  <main id="principal">
+    <!-- ===== Login (contas criadas pela administração no Firebase Authentication) ===== -->
+    <section class="painel login oculto" id="tela-login" aria-labelledby="t-login">
+      <h1 id="t-login">Entrar</h1>
+      <p class="muda">Acesso para professores e coordenação. A conta é criada pela administração da escola.</p>
+      <p class="alerta" id="alerta" role="alert"></p>
+      <label for="email">E-mail <input type="email" id="email" autocomplete="username"></label>
+      <label for="senha">Senha <input type="password" id="senha" autocomplete="current-password"></label>
+      <div class="acoes"><button type="button" class="botao" id="entrar">Entrar</button></div>
+    </section>
+
+    <!-- ===== Painel: menu das seções e conteúdo da seção aberta ===== -->
+    <div class="admin oculto" id="tela-painel">
+      <nav class="admin__menu" id="menu" aria-label="Seções da área da escola"></nav>
+      <div class="secao" id="secao"></div>
+    </div>
+  </main>
+
+  <!-- ===== Formulário de novo, editar e duplicar (campos conforme a seção) ===== -->
+  <dialog class="janela" id="janela" aria-labelledby="janela-titulo">
+    <form id="form-janela">
+      <h2 id="janela-titulo"></h2>
+      <div class="campos" id="campos"></div>
+      <div class="janela__acoes">
+        <button type="button" class="botao botao--secundario" id="janela-cancelar">Cancelar</button>
+        <button type="submit" class="botao" id="janela-salvar">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Sugestões do campo de disciplina (lista em config.js) -->
+  <datalist id="lista-disciplinas"></datalist>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

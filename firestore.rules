@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// Conteúdo: qualquer um lê, só professor (logado e cadastrado em admins) grava.
+// Publicar em: Firestore Database > Regras
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // cada professor só lê o próprio cadastro; ninguém grava pelo site
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // coleções fora da lista ficam bloqueadas
+    match /{colecao}/{id} {
+      allow read: if colecao in ['aulas', 'agenda', 'cardapio', 'avisos', 'resumos', 'anexos'];
+      allow write: if colecao in ['aulas', 'agenda', 'cardapio', 'avisos', 'resumos', 'anexos']
+        && request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testes do portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .resultado { list-style: none; padding: 0; }
+    .resultado li { padding: 8px 0; border-top: 1px solid var(--borda); display: grid; grid-template-columns: 28px 1fr auto; gap: 4px 8px; }
+    .resultado li:first-child { border-top: 0; }
+    .resultado .icone { font-weight: 700; }
+    .passou .icone { color: #2b6a3d; }
+    .falhou .icone { color: var(--perigo); }
+    .resultado .erro { grid-column: 2 / -1; color: var(--perigo); font-size: .9rem; white-space: pre-wrap; }
+    .resultado .tempo { color: var(--muda); font-size: .85rem; }
+    .grupo { margin-top: 18px; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muda); }
+    #palco { position: fixed; left: -5000px; top: 0; }
+    #palco iframe { border: 0; height: 800px; }
+  </style>
+</head>
+<body>
+  <main class="pagina">
+    <section class="painel">
+      <div class="painel__cabeca">
+        <div>
+          <h1>Testes automáticos</h1>
+          <p>Abre o portal e a área da escola com um banco de dados falso e confere cada função. Nada é gravado no Firebase.</p>
+        </div>
+        <button type="button" class="botao" id="rodar">Rodar os testes</button>
+      </div>
+      <p id="resumo" class="muda" aria-live="polite">Clique em "Rodar os testes".</p>
+      <div id="lista"></div>
+    </section>
+  </main>
+  <div id="palco" aria-hidden="true"></div>
+  <script type="module" src="testes.js"></script>
+</body>
+</html>

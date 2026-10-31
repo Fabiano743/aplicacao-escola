@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Horário, provas, avisos, resumos das aulas e cardápio da escola em um só lugar.">
+  <meta name="theme-color" content="#ffffff">
+  <title>Portal do Aluno</title>
+  <!--
+    Portal do Aluno - tela do aluno e da família.
+    O conteúdo das seções é preenchido por js/portal.js com os dados do Firestore.
+    Autor: Fabiano | out/2026
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Acessibilidade: atalho de teclado para pular o menu -->
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+
+  <!-- ===== Topo: marca, escolha da série e menu das seções ===== -->
+  <header class="topo">
+    <div class="topo__barra">
+      <div class="marca">
+        <span class="marca__logo" id="logo" aria-hidden="true"></span>
+        <span><strong id="nome-escola"></strong><small>Para alunos e famílias</small></span>
+      </div>
+      <!-- Opções das séries inseridas por portal.js; a escolha fica salva no aparelho -->
+      <label class="topo__serie" for="serie">Série
+        <select id="serie"><option value="">Escolha</option></select>
+      </label>
+    </div>
+    <nav class="topo__menu" aria-label="Seções do portal">
+      <a href="#hoje">Hoje</a>
+      <a href="#horario">Horário</a>
+      <a href="#provas">Provas e datas</a>
+      <a href="#avisos">Avisos</a>
+      <a href="#resumos">Resumos</a>
+      <a href="#cardapio">Cardápio</a>
+      <a href="#estudo">Como estudar</a>
+      <a href="#minha-agenda">Minha agenda</a>
+      <a href="#opiniao">Sua opinião</a>
+    </nav>
+  </header>
+
+  <main class="pagina" id="principal">
+
+    <!-- ===== Hoje: aulas, merenda e próximas provas do dia ===== -->
+    <section class="painel hoje" id="hoje" aria-labelledby="t-hoje">
+      <p class="hoje__data" id="hoje-data"></p>
+      <h1 id="t-hoje">Seu dia na escola</h1>
+      <div class="hoje__grade">
+        <div>
+          <h2>Aulas de hoje</h2>
+          <ul id="hoje-aulas"></ul>
+        </div>
+        <div>
+          <h2>Merenda de hoje</h2>
+          <ul id="hoje-merenda"></ul>
+        </div>
+        <div>
+          <h2>Próximas provas e datas</h2>
+          <ul id="hoje-proximos"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Horário das aulas (tabela horário x dia) ===== -->
+    <section class="painel" id="horario" aria-labelledby="t-horario">
+      <div class="painel__cabeca"><h2 id="t-horario">Horário das aulas</h2></div>
+      <div id="horario-area"></div>
+    </section>
+
+    <!-- ===== Provas e datas ===== -->
+    <section class="painel" id="provas" aria-labelledby="t-provas">
+      <div class="painel__cabeca">
+        <h2 id="t-provas">Provas e datas</h2>
+        <p>Provas, entregas de trabalho, eventos e feriados da sua série.</p>
+      </div>
+      <div id="provas-area"></div>
+    </section>
+
+    <!-- ===== Mural de avisos ===== -->
+    <section class="painel" id="avisos" aria-labelledby="t-avisos">
+      <div class="painel__cabeca"><h2 id="t-avisos">Mural de avisos</h2></div>
+      <ul class="avisos" id="lista-avisos"></ul>
+      <button type="button" class="botao botao--secundario mais oculto" id="mais-avisos"></button>
+    </section>
+
+    <!-- ===== Resumos das aulas: filtros, revisões do dia e lista por mês ===== -->
+    <section class="painel" id="resumos" aria-labelledby="t-resumos">
+      <div class="painel__cabeca">
+        <h2 id="t-resumos">Resumos das aulas</h2>
+        <p>O que foi visto em cada aula, organizado por mês. Os mais recentes aparecem primeiro.</p>
+      </div>
+      <div class="filtros">
+        <label for="filtro-disciplina">Disciplina
+          <select id="filtro-disciplina"></select>
+        </label>
+        <label for="busca-resumo">Buscar
+          <input type="search" id="busca-resumo" placeholder="Assunto ou palavra do resumo">
+        </label>
+      </div>
+      <div id="revisar"></div>
+      <div id="lista-resumos"></div>
+      <button type="button" class="botao botao--secundario mais oculto" id="mais-resumos"></button>
+    </section>
+
+    <!-- ===== Cardápio: arquivo da semana e cardápio por dia ===== -->
+    <section class="painel" id="cardapio" aria-labelledby="t-cardapio">
+      <div class="painel__cabeca"><h2 id="t-cardapio">Cardápio da semana</h2></div>
+      <div class="cardapio-imagem" id="cardapio-imagem"></div>
+      <div class="dias" id="grade-cardapio"></div>
+    </section>
+
+    <!-- ===== Como estudar: cronômetro (js/foco.js) e dicas ===== -->
+    <section class="painel" id="estudo" aria-labelledby="t-estudo">
+      <div class="painel__cabeca"><h2 id="t-estudo">Como estudar melhor</h2></div>
+      <div class="dicas">
+        <div class="foco" aria-labelledby="t-foco">
+          <h3 id="t-foco">Cronômetro de estudo</h3>
+          <p class="foco__fase" id="foco-fase"></p>
+          <p class="foco__tempo" id="foco-tempo" role="timer"></p>
+          <div class="acoes">
+            <button type="button" class="botao" id="foco-iniciar"></button>
+            <button type="button" class="botao botao--secundario" id="foco-zerar">Zerar</button>
+          </div>
+        </div>
+        <div class="dica"><h3>Blocos curtos</h3><p>Estude por 25 minutos e descanse 5. O cronômetro ao lado avisa quando parar e quando voltar.</p></div>
+        <div class="dica"><h3>Revisão espaçada</h3><p>Revise no dia seguinte, depois de uma semana e depois de um mês. Marque o resumo como estudado e o portal lembra você das datas.</p></div>
+        <div class="dica"><h3>Teste a si mesmo</h3><p>Tentar lembrar a resposta fixa mais do que reler. Quando o resumo tiver perguntas, faça o teste antes de olhar o conteúdo.</p></div>
+        <div class="dica"><h3>Com suas palavras</h3><p>Explique o assunto como se ensinasse um colega. Onde você travar, volte ao resumo.</p></div>
+        <div class="dica"><h3>Mapa mental</h3><p>Coloque o tema no centro e ligue as ideias principais com setas e cores.</p></div>
+        <div class="dica"><h3>Lugar e horário</h3><p>Estude sempre no mesmo lugar, longe do celular. A rotina reduz o esforço para começar.</p></div>
+      </div>
+    </section>
+
+    <!-- ===== Minha agenda: anotações salvas só no aparelho (localStorage) ===== -->
+    <section class="painel" id="minha-agenda" aria-labelledby="t-agenda">
+      <div class="painel__cabeca">
+        <h2 id="t-agenda">Minha agenda</h2>
+        <p>Anote o que você precisa fazer, como estudar para uma prova. Fica salvo só neste aparelho e ninguém mais vê.</p>
+      </div>
+      <div class="campos">
+        <label for="ag-data">Data <input type="date" id="ag-data"></label>
+        <label for="ag-texto">O que fazer <input type="text" id="ag-texto" maxlength="90" placeholder="Ex.: estudar frações para a prova"></label>
+      </div>
+      <div class="acoes" style="margin-top:12px"><button type="button" class="botao" id="ag-add">Anotar</button></div>
+      <ul class="lista-simples" id="lista-minha"></ul>
+    </section>
+
+    <!-- ===== Sua opinião: Google Forms (link configurado em montarFormularios, portal.js) ===== -->
+    <section class="painel" id="opiniao" aria-labelledby="t-opiniao">
+      <div class="painel__cabeca">
+        <h2 id="t-opiniao">Sua opinião</h2>
+        <p>A escola usa as respostas para melhorar as aulas e o próprio portal.</p>
+      </div>
+      <div id="area-formularios"></div>
+    </section>
+  </main>
+
+  <!-- ===== Rodapé ===== -->
+  <footer class="rodape">
+    <p id="rodape-texto"></p>
+    <p><a href="admin.html">Área da escola (professores e coordenação)</a></p>
+  </footer>
+
+  <script type="module" src="js/portal.js"></script>
+</body>
+</html>
