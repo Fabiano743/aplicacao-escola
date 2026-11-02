@@ -1426,12 +1426,11 @@ async function quandoLoginMudar(usuario) {
 // ===== Início =====
 
 /**
- * Inicia a área da escola: dados da escola, sugestões de disciplina, eventos de
+ * Inicia a área da escola: sigla da escola no logo, sugestões de disciplina, eventos de
  * login, sair e formulário, aviso ao fechar a aba com horário não salvo e o
  * acompanhamento do login.
  */
 function iniciar() {
-  $("#nome-escola").textContent = ESCOLA.nome;
   $("#logo").textContent = ESCOLA.sigla;
 
   const datalist = $("#lista-disciplinas");
